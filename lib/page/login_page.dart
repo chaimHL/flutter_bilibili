@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lbluebook_logistics/navigator/lb_navigator.dart';
 import 'package:lbluebook_logistics/util/string_util.dart';
 import 'package:lbluebook_logistics/util/toast.dart';
 import 'package:lbluebook_logistics/widget/login_button.dart';
@@ -11,11 +12,7 @@ import '../http/dao/login_dao.dart';
 import '../http/request/application_configuration_request.dart';
 
 class LoginPage extends StatefulWidget {
-  final VoidCallback onJumpLanguage;
-  final VoidCallback onSuccess;
-
-  const LoginPage(
-      {super.key, required this.onJumpLanguage, required this.onSuccess});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -29,9 +26,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('登录',
-          rightIcon: const Icon(Icons.g_translate),
-          rightBtnClick: widget.onJumpLanguage),
+      appBar: appBar('登录', rightIcon: const Icon(Icons.g_translate),
+          rightBtnClick: () {
+        LbNavigator.getInstance().onJumpTo(RouteStatus.language);
+      }),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: ListView(
@@ -89,7 +87,8 @@ class _LoginPageState extends State<LoginPage> {
       print('result:$result');
       if (result['error'] == null) {
         showSuccessToast('登录成功');
-        widget.onSuccess();
+        print('车工');
+        LbNavigator.getInstance().onJumpTo(RouteStatus.home);
       } else {
         showWarnToast('登录失败');
       }

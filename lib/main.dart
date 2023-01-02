@@ -52,11 +52,21 @@ class _LbAppState extends State<LbApp> {
 // 路由导航部分
 class LbRouteDelegate extends RouterDelegate<LbRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<LbRoutePath> {
-  // 为 Navigator 设置一个 key，必要的时候可以通过 navigatorKey。currentState 来获取 NavigatorState 对象
-  // 该对象里有很多方法，比如回到上一页等
   @override
   final GlobalKey<NavigatorState> navigatorKey;
-  LbRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  // 为 Navigator 设置一个 key，必要的时候可以通过 navigatorKey。currentState 来获取 NavigatorState 对象
+  // 该对象里有很多方法，比如回到上一页等
+  LbRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>() {
+    // 实现路由跳转
+    LbNavigator.getInstance().registerRouteJump(
+        RouteJumpListener(onJumpTo: (RouteStatus routeStatus, {Map? args}) {
+      _routeStatus = routeStatus;
+      if (routeStatus == RouteStatus.detail) {
+        videoModel = args?['videoMo'];
+      }
+      notifyListeners();
+    }));
+  }
   RouteStatus _routeStatus = RouteStatus.home;
   List<MaterialPage> pages = [];
   VideoModel? videoModel;
@@ -73,12 +83,7 @@ class LbRouteDelegate extends RouterDelegate<LbRoutePath>
     if (routeStatus == RouteStatus.home) {
       // 因为首页不可回退，所以将栈中其它页面全部出栈
       pages.clear();
-      page = pageWrap(HomePage(
-        onJumpToDetail: (videoModel) {
-          this.videoModel = videoModel;
-          notifyListeners();
-        },
-      ));
+      page = pageWrap(const HomePage());
     } else if (routeStatus == RouteStatus.detail) {
       if (videoModel != null) {
         page = pageWrap(VideoDetailPage(videoModel!));
@@ -88,20 +93,14 @@ class LbRouteDelegate extends RouterDelegate<LbRoutePath>
       page = pageWrap(const LanguagePage());
       print(page == null);
     } else if (routeStatus == RouteStatus.login) {
-      page = pageWrap(LoginPage(onJumpLanguage: () {
-        print(2);
-        _routeStatus = RouteStatus.language;
-        notifyListeners();
-      }, onSuccess: () {
-        _routeStatus = RouteStatus.home;
-        notifyListeners();
-      }));
+      page = pageWrap(const LoginPage());
     }
 
     // 重新创建一个数组，否则 pages 因引用没有改变 路由不会生效
     tempPages = [...tempPages, page];
+    // 通知路由发生变化
+    LbNavigator.getInstance().notify(tempPages, pages);
     pages = tempPages;
-
     return WillPopScope(
       // 修复安卓物理返回建无法返回上一页
       onWillPop: () async => !await navigatorKey.currentState!.maybePop(),
@@ -123,7 +122,10 @@ class LbRouteDelegate extends RouterDelegate<LbRoutePath>
           if (!route.didPop(result)) {
             return false;
           }
+          var tempPages = [...pages];
           pages.removeLast();
+          // 通知路由发生变化
+          LbNavigator.getInstance().notify(pages, tempPages);
           return true;
         },
       ),
