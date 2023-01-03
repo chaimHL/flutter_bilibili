@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lbluebook_logistics/http/dao/login_dao.dart';
+import 'package:lbluebook_logistics/navigator/bottom_navigator.dart';
 import 'package:lbluebook_logistics/navigator/lb_navigator.dart';
 import 'package:lbluebook_logistics/page/home_page.dart';
 import 'package:lbluebook_logistics/page/login_page.dart';
@@ -83,7 +84,7 @@ class LbRouteDelegate extends RouterDelegate<LbRoutePath>
     if (routeStatus == RouteStatus.home) {
       // 因为首页不可回退，所以将栈中其它页面全部出栈
       pages.clear();
-      page = pageWrap(const HomePage());
+      page = pageWrap(const BottomNavigator());
     } else if (routeStatus == RouteStatus.detail) {
       if (videoModel != null) {
         page = pageWrap(VideoDetailPage(videoModel!));

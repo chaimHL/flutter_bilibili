@@ -10,7 +10,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   var listener;
   @override
   void initState() {
@@ -19,9 +20,9 @@ class _HomePageState extends State<HomePage> {
       print('首页监听:current:${current.page}');
       print('首页监听:pre:${pre.page}');
       if (widget == current.page || current.page is HomePage) {
-        print('首页展现');
+        print('首页: onResume 展现');
       } else if (widget == pre?.page || pre?.page is HomePage) {
-        print('首页压后台，也就是隐藏了');
+        print('首页: onPause 隐藏');
       }
     });
   }
@@ -50,4 +51,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

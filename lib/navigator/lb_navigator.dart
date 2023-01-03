@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lbluebook_logistics/navigator/bottom_navigator.dart';
 import 'package:lbluebook_logistics/page/home_page.dart';
 import 'package:lbluebook_logistics/page/language_page.dart';
 import 'package:lbluebook_logistics/page/video_detail_page.dart';
@@ -31,7 +32,7 @@ RouteStatus getStatus(MaterialPage page) {
     return RouteStatus.login;
   } else if (page.child is LanguagePage) {
     return RouteStatus.language;
-  } else if (page.child is HomePage) {
+  } else if (page.child is BottomNavigator) {
     return RouteStatus.home;
   } else if (page.child is VideoDetailPage) {
     return RouteStatus.detail;
@@ -55,13 +56,20 @@ class LbNavigator extends _RouteJumpListener {
   RouteJumpListener? _routeJump;
   final List<RouteChangeListener> _listeners = [];
   RouteStatusInfo? _current;
+  RouteStatusInfo? _bottomTab;
   LbNavigator._();
   static LbNavigator getInstance() {
     _instance ??= LbNavigator._();
     return _instance!;
   }
 
-  // 组测路由的跳转逻辑
+  // 首页底部 tab 切换监听
+  void onBottomTabChange(int index, Widget page) {
+    _bottomTab = RouteStatusInfo(RouteStatus.home, page);
+    _notify(_bottomTab!);
+  }
+
+  // 注册路由的跳转逻辑
   void registerRouteJump(RouteJumpListener routeJumpListener) {
     _routeJump = routeJumpListener;
   }
@@ -94,6 +102,10 @@ class LbNavigator extends _RouteJumpListener {
   }
 
   void _notify(RouteStatusInfo current) {
+    if (current.page is BottomNavigator && _bottomTab != null) {
+      // 打开首页时，明确具体的 tab
+      current = _bottomTab!;
+    }
     print('navigtor:current:${current.page}');
     print('navigtor:pre:${_current?.page}');
     _listeners.forEach((listener) {
