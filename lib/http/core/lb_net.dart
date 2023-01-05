@@ -17,10 +17,8 @@ class LbNet {
     } on LbNetError catch (e) {
       error = e;
       response = e.data;
-      printLog('222$e');
     } catch (e) {
       error = e;
-      printLog('333$e');
     }
 
     if (response == null) {
@@ -29,6 +27,7 @@ class LbNet {
     var result = response?.data;
 
     var status = response?.statusCode;
+    print('status:$status');
 
     switch (status) {
       case 200:
@@ -36,13 +35,14 @@ class LbNet {
       case 401:
         throw NeedLogin();
       case 403:
-        var errMsg = '请求出错';
+        var errMsg = '请求出错 403';
         if (result.containsKey('error')) {
-          errMsg = result['error']['message'] ?? '请求出错';
+          errMsg = result?['error']?['message'] ?? '请求出错 403';
         }
         throw NeedAuth(errMsg, data: result);
       default:
-        throw LbNetError(status!, result.toString(), data: result);
+        throw LbNetError(status ?? -1, result?['error']?['message'] ?? '请求出错',
+            data: result);
     }
   }
 

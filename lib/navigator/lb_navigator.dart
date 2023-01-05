@@ -106,8 +106,6 @@ class LbNavigator extends _RouteJumpListener {
       // 打开首页时，明确具体的 tab
       current = _bottomTab!;
     }
-    print('navigtor:current:${current.page}');
-    print('navigtor:pre:${_current?.page}');
     _listeners.forEach((listener) {
       listener(current, _current!);
     });

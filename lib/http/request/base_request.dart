@@ -27,12 +27,15 @@ abstract class BaseRequest {
       }
     }
     if (useHttps) {
-      uri = Uri.https(authority(), pathStr, queryParameters);
+      uri = Uri.https(authority(), pathStr,
+          queryParameters.isEmpty ? null : queryParameters);
     } else {
-      uri = Uri.http(authority(), pathStr, queryParameters);
+      uri = Uri.http(authority(), pathStr,
+          queryParameters.isEmpty ? null : queryParameters);
     }
     if (needLogin()) {
-      addHeader('authorization', LoginDao.getTokenType() + LoginDao.getToken());
+      addHeader(
+          'authorization', LoginDao.getTokenType() + ' ' + LoginDao.getToken());
     }
     return uri.toString();
   }
@@ -42,8 +45,15 @@ abstract class BaseRequest {
 
   // query 参数
   Map<String, String> queryParameters = Map();
-  BaseRequest add(String k, Object v) {
+  BaseRequest addQuery(String k, Object v) {
     queryParameters[k] = v.toString();
+    return this;
+  }
+
+  // body 参数
+  Map<String, dynamic> body = {};
+  BaseRequest addBody(String k, Object v) {
+    body[k] = v.toString();
     return this;
   }
 

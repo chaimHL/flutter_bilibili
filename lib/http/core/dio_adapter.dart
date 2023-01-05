@@ -11,6 +11,7 @@ class DioAdapter extends LbNetAdapter {
     var error;
     try {
       if (request.httpMethod() == HttpMethod.GET) {
+        print('get: ${request.url()}');
         response = await Dio().get(request.url(), options: options);
       } else if (request.httpMethod() == HttpMethod.POST) {
         response = await Dio().post(request.url(),
@@ -24,7 +25,9 @@ class DioAdapter extends LbNetAdapter {
     }
 
     if (error != null) {
-      throw LbNetError(response.statusCode ?? -1, error.toString(),
+      print('error: ${error.response.data['error']['message']}');
+      throw LbNetError(response.statusCode ?? -1, '1111',
+          // error.response.data['error']['message'].toString(),
           data: buildRes(response, request));
     }
 

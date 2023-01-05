@@ -10,11 +10,11 @@ class LoginDao {
   static _send(String username, String password) async {
     LoginRequest request = LoginRequest();
     request
-        .add('username', username)
-        .add('password', password)
-        .add('clientSecret', '1q2w3e*')
-        .add('grantType', 'password_blue')
-        .add('clientId', 'Logistics_App');
+        .addBody('username', username)
+        .addBody('password', password)
+        .addBody('clientSecret', '1q2w3e*')
+        .addBody('grantType', 'password_blue')
+        .addBody('clientId', 'Logistics_App');
     var result = await LbNet.getInstance().fire(request);
 
     if (result['error'] == null &&
