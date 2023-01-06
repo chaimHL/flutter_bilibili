@@ -11,6 +11,6 @@ class HomeTabPage extends StatefulWidget {
 class _HomeTabPageState extends State<HomeTabPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Text(widget.name);
   }
 }

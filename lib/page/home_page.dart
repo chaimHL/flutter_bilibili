@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lbluebook_logistics/core/lb_state.dart';
 import 'package:lbluebook_logistics/http/core/lb_error.dart';
 import 'package:lbluebook_logistics/http/dao/home_dao.dart';
 import 'package:lbluebook_logistics/navigator/lb_navigator.dart';
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _HomePageState extends LbState<HomePage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   var listener;
   late TabController _controller;
