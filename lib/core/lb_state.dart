@@ -8,7 +8,7 @@ abstract class LbState<T extends StatefulWidget> extends State<T> {
       // 如果页面被装载
       super.setState(fn);
     } else {
-      print('页面已销毁，setState 不执行');
+      print('页面已销毁，setState 不执行，$toString()');
     }
   }
 }

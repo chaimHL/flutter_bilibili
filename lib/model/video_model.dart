@@ -1,5 +1,6 @@
 class VideoModel {
-  final int vid;
+  final String vid;
+  final String cover;
 
-  VideoModel(this.vid);
+  VideoModel(this.vid, this.cover);
 }

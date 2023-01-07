@@ -7,13 +7,15 @@ import 'package:lbluebook_logistics/page/home_tab_page.dart';
 import 'package:lbluebook_logistics/util/toast.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
+import '../model/banner_model.dart';
 import '../model/home_model.dart';
-import '../model/video_model.dart';
 import '../util/color.dart';
 import '../util/font.dart';
+import '../widget/navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final ValueChanged<int>? onJumpTo;
+  const HomePage({super.key, this.onJumpTo});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,13 +26,12 @@ class _HomePageState extends LbState<HomePage>
   var listener;
   late TabController _controller;
   List<HomeTabsMo?> tabsList = [];
+  List<BannerMo> bannerList = [];
   @override
   void initState() {
     super.initState();
     _controller = TabController(length: tabsList.length, vsync: this);
     LbNavigator.getInstance().addListener(listener = (current, pre) {
-      print('首页监听:current:${current.page}');
-      print('首页监听:pre:${pre.page}');
       if (widget == current.page || current.page is HomePage) {
         print('首页: onResume 展现');
       } else if (widget == pre?.page || pre?.page is HomePage) {
@@ -50,8 +51,14 @@ class _HomePageState extends LbState<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
+          LbNavigationBar(
+            color: Colors.white,
+            statusStyle: StatusStyle.DARK_CONTENT,
+            child: _appBar(),
+          ),
           Container(
             color: Colors.white,
             padding: const EdgeInsets.only(top: 30),
@@ -65,7 +72,10 @@ class _HomePageState extends LbState<HomePage>
             child: TabBarView(
                 controller: _controller,
                 children: tabsList.map((tab) {
-                  return HomeTabPage(name: tab?.displayName ?? '-');
+                  return HomeTabPage(
+                    categoryName: tab?.displayName ?? '-',
+                    bannerList: tab?.displayName == '公司动态' ? bannerList : null,
+                  );
                 }).toList()),
           )
         ],
@@ -108,6 +118,14 @@ class _HomePageState extends LbState<HomePage>
       }
       setState(() {
         tabsList = result.items ?? [];
+        bannerList = [
+          BannerMo('banner1', 'video',
+              'https://imgcps.jd.com/img-cubic/creative_server_cia_jdcloud/v2/2000367/100030411817/FocusFullshop/CkNqZnMvdDEvMTQwNTgzLzE2LzMyMDUyLzU2Mzk1LzYzYjA4YWRhRmNlY2VkYzU3L2NiYmMxOGFiZGIwMmI0NmYucG5nEgkyLXR5XzBfNTMwAjjvi3pCGAoS5Lqs6Ie05LyY54mp5p2l6KKtEAEYAUIQCgznlYXkuqvkvJjlk4EQAkIQCgznq4vljbPmiqLotK0QBkIKCgbnp43ojYkQB1ip6JvS9AI/cr/s/q.jpg'),
+          BannerMo('banner2', 'video',
+              'https://img12.360buyimg.com/pop/s1180x940_jfs/t1/102791/25/34343/38728/63b4ed5dFd8faf95e/09150c42d8b545cc.jpg'),
+          BannerMo('banner3', 'video',
+              'https://img30.360buyimg.com/babel/s1180x940_jfs/t1/60355/18/23395/121919/63ae9ecdF8308a54a/a3731f453c0fa164.png')
+        ];
       });
     } on NeedAuth catch (e) {
       print(e);
@@ -116,5 +134,59 @@ class _HomePageState extends LbState<HomePage>
       print('e$e');
       showWarnToast(e.message);
     }
+  }
+
+  _appBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              if (widget.onJumpTo != null) {
+                widget.onJumpTo!(3); // 跳转到 “我的” tab
+              }
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(23),
+              child: const Image(
+                height: 46,
+                width: 46,
+                image: AssetImage('images/avatar.png'),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  height: 32,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(color: Colors.grey[100]),
+                  child: const Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const Icon(
+            Icons.explore_outlined,
+            color: Colors.grey,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Icon(
+              Icons.mail_outline,
+              color: Colors.grey,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

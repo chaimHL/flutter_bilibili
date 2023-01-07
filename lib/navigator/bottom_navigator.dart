@@ -24,7 +24,14 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   bool _hasBuild = false;
   @override
   Widget build(BuildContext context) {
-    _pages = const [HomePage(), RankingPage(), FavoritePage(), ProfilePage()];
+    _pages = [
+      HomePage(
+        onJumpTo: (index) => _onJumpTo(index, pageChange: false),
+      ),
+      const RankingPage(),
+      const FavoritePage(),
+      const ProfilePage()
+    ];
     if (!_hasBuild) {
       // 通知页面首次打开时打开的是哪个 tab
       LbNavigator.getInstance()
