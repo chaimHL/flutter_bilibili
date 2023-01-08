@@ -84,17 +84,14 @@ class _LoginPageState extends State<LoginPage> {
   void _send() async {
     try {
       var result = await LoginDao.login(username, password);
-      print('result:$result');
       if (result['error'] == null) {
         showSuccessToast('登录成功');
-        print('车工');
         LbNavigator.getInstance().onJumpTo(RouteStatus.home);
       } else {
         showWarnToast('登录失败');
       }
       await LbNet.getInstance().fire(ApplicationConfigurationRequest());
     } on LbNetError catch (e) {
-      print('eeeeee$e');
       showWarnToast(e.message);
     }
   }

@@ -111,7 +111,6 @@ class _HomePageState extends LbState<HomePage>
   void loadData() async {
     try {
       HomeMo result = await HomeDao.get('3a058056-5433-5bc5-be33-31bb403f792e');
-      print('loadData: $result');
       if (result.items != null) {
         // tab 长度变化后需要重新创建 TabController
         _controller = TabController(length: result.items!.length, vsync: this);

@@ -25,9 +25,7 @@ class LbNet {
       printLog(error);
     }
     var result = response?.data;
-
     var status = response?.statusCode;
-    print('status:$status');
 
     switch (status) {
       case 200:

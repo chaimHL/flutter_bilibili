@@ -4,6 +4,8 @@ import 'package:lbluebook_logistics/navigator/lb_navigator.dart';
 import 'package:lbluebook_logistics/util/format_util.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../util/view_util.dart';
+
 class VideoCard extends StatelessWidget {
   final VideoModel videoModel;
   const VideoCard({Key? key, required this.videoModel}) : super(key: key);
@@ -35,13 +37,17 @@ class VideoCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        FadeInImage.memoryNetwork(
-          placeholder: kTransparentImage,
-          image: videoModel.cover,
-          height: 120,
-          width: size.width / 2,
-          fit: BoxFit.cover,
-        ),
+        // 使用本地缓存效果的 image
+        cachedImage(videoModel.cover, width: size.width / 2 - 10, height: 120),
+
+        /// 使用不带本地缓存但是有渐变淡入效果的图片
+        // FadeInImage.memoryNetwork(
+        //   placeholder: kTransparentImage,
+        //   image: videoModel.cover,
+        //   height: 120,
+        //   width: size.width / 2,
+        //   fit: BoxFit.cover,
+        // ),
         Positioned(
             left: 0,
             right: 0,
@@ -122,13 +128,9 @@ class VideoCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                videoModel.cover,
-                width: 24,
-                height: 24,
-              ),
+              child: cachedImage(videoModel.cover, width: 24, height: 24),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(left: 8),
               child: Text(
                 '统一',
@@ -137,7 +139,7 @@ class VideoCard extends StatelessWidget {
             ),
           ],
         ),
-        Icon(
+        const Icon(
           Icons.more_vert_sharp,
           size: 15,
           color: Colors.grey,

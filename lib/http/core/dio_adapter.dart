@@ -14,8 +14,8 @@ class DioAdapter extends LbNetAdapter {
         print('get: ${request.url()}');
         response = await Dio().get(request.url(), options: options);
       } else if (request.httpMethod() == HttpMethod.POST) {
-        response = await Dio().post(request.url(),
-            data: request.queryParameters, options: options);
+        response = await Dio()
+            .post(request.url(), data: request.body, options: options);
       } else if (request.httpMethod() == HttpMethod.DELETE) {
         response = await Dio().delete(request.url(), options: options);
       }

@@ -10,7 +10,6 @@ class HomeDao {
         .addBody('skipCount', (pageIndex - 1) * pageSize)
         .addBody('maxResultCount', pageSize);
     var result = await LbNet.getInstance().fire(request);
-    print(result);
     return HomeMo.fromJson(result);
   }
 }

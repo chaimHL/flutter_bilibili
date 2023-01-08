@@ -20,7 +20,8 @@ class HomeTabPage extends StatefulWidget {
   State<HomeTabPage> createState() => _HomeTabPageState();
 }
 
-class _HomeTabPageState extends State<HomeTabPage> {
+class _HomeTabPageState extends State<HomeTabPage>
+    with AutomaticKeepAliveClientMixin {
   List<VideoModel> videoList = [];
   int pageIndex = 0;
   @override
@@ -37,7 +38,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
       child: StaggeredGridView.countBuilder(
         padding: EdgeInsets.symmetric(horizontal: 16),
         crossAxisCount: 2,
-        itemCount: videoList.length + 1,
+        itemCount: videoList.length,
         itemBuilder: (BuildContext context, int index) {
           // banner 独占第一列
           if (widget.bannerList != null && index == 0) {
@@ -46,7 +47,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
               child: _banner(),
             );
           } else {
-            return VideoCard(videoModel: videoList[index - 1]);
+            return VideoCard(videoModel: videoList[index]);
           }
         },
         staggeredTileBuilder: (int index) {
@@ -105,4 +106,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
       showWarnToast(e.message);
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
