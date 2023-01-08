@@ -35,6 +35,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
       removeTop: true,
       context: context,
       child: StaggeredGridView.countBuilder(
+        padding: EdgeInsets.symmetric(horizontal: 16),
         crossAxisCount: 2,
         itemCount: videoList.length + 1,
         itemBuilder: (BuildContext context, int index) {
@@ -60,16 +61,13 @@ class _HomeTabPageState extends State<HomeTabPage> {
   }
 
   _banner() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      child: LbBanner(widget.bannerList!),
-    );
+    return LbBanner(widget.bannerList!);
   }
 
   void _loadData({loadMore = false}) async {
     // 弄个假数据
     List<VideoModel> mockList = [
-      VideoModel('口罩',
+      VideoModel('戴着口罩的妹子，一半沐浴在阳光下，一般躲藏在阴影中，真美',
           'https://i2.hdslb.com/bfs/archive/cb4b7dcb54460e29d53c45d6584532eb50255e53.jpg'),
       VideoModel('黄衣服',
           'https://i1.hdslb.com/bfs/archive/ddcb6dad24d2414ec3e205caf01f8d830b938521.jpg'),
