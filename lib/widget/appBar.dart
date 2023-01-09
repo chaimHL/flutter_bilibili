@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 appBar(String title, {Icon? rightIcon, VoidCallback? rightBtnClick}) {
   return AppBar(
+    elevation: 1,
     centerTitle: true,
     titleSpacing: 0,
     leading: const BackButton(),

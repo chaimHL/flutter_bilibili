@@ -5,6 +5,7 @@ import 'package:lbluebook_logistics/http/dao/home_dao.dart';
 import 'package:lbluebook_logistics/navigator/lb_navigator.dart';
 import 'package:lbluebook_logistics/page/home_tab_page.dart';
 import 'package:lbluebook_logistics/util/toast.dart';
+import 'package:lbluebook_logistics/widget/lb_tab.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 import '../model/banner_model.dart';
@@ -61,7 +62,6 @@ class _HomePageState extends LbState<HomePage>
           ),
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.only(top: 30),
             child: Container(
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.center,
@@ -87,25 +87,17 @@ class _HomePageState extends LbState<HomePage>
   bool get wantKeepAlive => true;
 
   _tabBar() {
-    return TabBar(
-        controller: _controller,
-        isScrollable: true,
-        labelColor: Colors.black,
-        indicator: const UnderlineIndicator(
-            strokeCap: StrokeCap.round,
-            borderSide: BorderSide(color: ColorPrimary, width: 3),
-            insets: EdgeInsets.only(left: 16, right: 16)),
-        tabs: tabsList.map<Tab>((tab) {
+    return LbTab(
+        tabsList.map<Tab>((tab) {
           return Tab(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Text(
-                tab?.displayName ?? '-',
-                style: const TextStyle(fontSize: FontSizeDefalut),
-              ),
-            ),
+            text: tab?.displayName ?? '-',
           );
-        }).toList());
+        }).toList(),
+        controller: _controller,
+        fontSize: 16,
+        borderWidth: 3,
+        insets: 13,
+        unselectedLabelColor: Colors.black54);
   }
 
   void loadData() async {
