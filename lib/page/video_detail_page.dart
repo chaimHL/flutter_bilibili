@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lbluebook_logistics/model/video_model.dart';
 import 'package:lbluebook_logistics/widget/appBar.dart';
 import 'package:lbluebook_logistics/widget/lb_tab.dart';
+import 'package:lbluebook_logistics/widget/video_header.dart';
+import 'package:lbluebook_logistics/widget/video_tool_bar.dart';
 
 class VideoDetailPage extends StatefulWidget {
   final VideoModel videoModel;
@@ -30,7 +32,19 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: appBar('详情'), body: _buildTabNavigation());
+    return Scaffold(
+        appBar: appBar('详情'),
+        body: Column(
+          children: [
+            _buildTabNavigation(),
+            Flexible(
+              child: TabBarView(
+                controller: _controller,
+                children: [_buildDetailList(), const Text('敬请期待')],
+              ),
+            ),
+          ],
+        ));
   }
 
   _buildTabNavigation() {
@@ -46,7 +60,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _tabBar(),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(right: 20),
               child: Icon(
                 Icons.live_tv_rounded,
@@ -69,4 +83,30 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       controller: _controller,
     );
   }
+
+  _buildDetailList() {
+    return ListView(
+      children: [...buildContents()],
+    );
+  }
+
+  buildContents() {
+    return [
+      VideoHeader(widget.videoModel),
+      VideoToolBar(
+        likeNumber: 55010,
+        isLike: true,
+        coin: 1001,
+        onLike: _doLike,
+        onUnLike: _onUnLike,
+        onFavority: _onFavority,
+      ),
+    ];
+  }
+
+  void _doLike() {}
+
+  void _onUnLike() {}
+
+  void _onFavority() {}
 }

@@ -29,7 +29,7 @@ blackLinearGradient({bool fromTop = false}) {
   return LinearGradient(
       begin: fromTop ? Alignment.topCenter : Alignment.bottomCenter,
       end: fromTop ? Alignment.bottomCenter : Alignment.topCenter,
-      colors: [
+      colors: const [
         Colors.black54,
         Colors.black45,
         Colors.black38,
@@ -37,4 +37,18 @@ blackLinearGradient({bool fromTop = false}) {
         Colors.black12,
         Colors.transparent
       ]);
+}
+
+// border
+borderLine({bottom = true, top = false}) {
+  BorderSide borderSide = const BorderSide(width: 0.5, color: Colors.black12);
+  return Border(
+    bottom: bottom ? borderSide : BorderSide.none,
+    top: top ? borderSide : BorderSide.none,
+  );
+}
+
+// 间距
+SizedBox LbSpace({double height = 1, double width = 1}) {
+  return SizedBox(height: height, width: width);
 }
