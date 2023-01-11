@@ -12,7 +12,9 @@ import '../model/banner_model.dart';
 import '../model/home_model.dart';
 import '../util/color.dart';
 import '../util/font.dart';
-import '../widget/navigation_bar.dart';
+import 'package:lbluebook_logistics/widget/lb_navigation_bar.dart';
+
+import '../util/view_util.dart';
 
 class HomePage extends StatefulWidget {
   final ValueChanged<int>? onJumpTo;
@@ -65,6 +67,7 @@ class _HomePageState extends LbState<HomePage>
             child: Container(
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.center,
+              decoration: bottomBoxShadow(),
               child: _tabBar(),
             ),
           ),
