@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lbluebook_logistics/util/format_util.dart';
 
 // 带本地缓存的 image
 Widget cachedImage(String url,
@@ -51,4 +52,23 @@ borderLine({bottom = true, top = false}) {
 // 间距
 SizedBox LbSpace({double height = 1, double width = 1}) {
   return SizedBox(height: height, width: width);
+}
+
+// 带文字的小图标
+smallIconText(IconData iconData, var text) {
+  var style = TextStyle(fontSize: 12, color: Colors.grey);
+  if (text is int) {
+    text = countFormat(text);
+  }
+  return [
+    Icon(
+      iconData,
+      color: Colors.grey,
+      size: 12,
+    ),
+    Text(
+      ' $text',
+      style: style,
+    )
+  ];
 }
