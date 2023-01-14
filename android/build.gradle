@@ -1,14 +1,14 @@
 buildscript {
     ext.kotlin_version = '1.6.10'
     repositories {
+        // google()
+        // mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven {
             allowInsecureProtocol = true
-            url 'https://maven.aliyun.com/nexus/content/groups/public' }
-//        google()
-//        mavenCentral()
-
+            url 'http://maven.aliyun.com/nexus/content/groups/public'
+        }
     }
 
     dependencies {
@@ -19,13 +19,14 @@ buildscript {
 
 allprojects {
     repositories {
+        // google()
+        // mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven {
             allowInsecureProtocol = true
-            url 'https://maven.aliyun.com/nexus/content/groups/public' }
-//        google()
-//        mavenCentral()
+            url 'http://maven.aliyun.com/nexus/content/groups/public'
+        }
     }
 }
 
