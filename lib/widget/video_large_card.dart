@@ -17,8 +17,8 @@ class VideoLargeCard extends StatelessWidget {
             .onJumpTo(RouteStatus.detail, args: {'videoMo': videoModel});
       },
       child: Container(
-        margin: EdgeInsets.only(left: 15, right: 15, bottom: 5),
-        padding: EdgeInsets.only(bottom: 6),
+        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 5),
+        padding: const EdgeInsets.only(bottom: 6),
         height: 106,
         decoration: BoxDecoration(border: borderLine()),
         child: Row(
