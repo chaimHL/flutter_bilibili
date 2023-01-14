@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:lbluebook_logistics/core/lb_base_tab_state.dart';
 import 'package:lbluebook_logistics/widget/lb_banner.dart';
 import 'package:lbluebook_logistics/widget/video_card.dart';
 
@@ -20,25 +21,29 @@ class HomeTabPage extends StatefulWidget {
   State<HomeTabPage> createState() => _HomeTabPageState();
 }
 
-class _HomeTabPageState extends State<HomeTabPage>
-    with AutomaticKeepAliveClientMixin {
-  List<VideoModel> videoList = [];
-  int pageIndex = 0;
+class _HomeTabPageState
+    extends LbBaseTabState<HomeMo, VideoModel, HomeTabPage> {
   @override
   void initState() {
-    _loadData();
     super.initState();
+    print(widget.categoryName);
+    print(widget.bannerList);
+  }
+
+  _banner() {
+    return LbBanner(widget.bannerList!);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      removeTop: true,
-      context: context,
-      child: StaggeredGridView.countBuilder(
+  bool get wantKeepAlive => true;
+
+  @override
+  get contentChild => StaggeredGridView.countBuilder(
+        controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 16),
         crossAxisCount: 2,
-        itemCount: videoList.length,
+        itemCount: dataList.length,
         itemBuilder: (BuildContext context, int index) {
           // banner 独占第一列
           if (widget.bannerList != null && index == 0) {
@@ -47,7 +52,7 @@ class _HomeTabPageState extends State<HomeTabPage>
               child: _banner(),
             );
           } else {
-            return VideoCard(videoModel: videoList[index]);
+            return VideoCard(videoModel: dataList[index]);
           }
         },
         staggeredTileBuilder: (int index) {
@@ -57,15 +62,18 @@ class _HomeTabPageState extends State<HomeTabPage>
             return StaggeredTile.fit(1);
           }
         },
-      ),
-    );
+      );
+
+  @override
+  Future<HomeMo> getData(int pageIndex) async {
+    HomeMo result = await HomeDao.get(widget.categoryName,
+        pageIndex: pageIndex, pageSize: 10);
+    return result;
   }
 
-  _banner() {
-    return LbBanner(widget.bannerList!);
-  }
-
-  void _loadData({loadMore = false}) async {
+  @override
+  List<VideoModel> parseList(HomeMo result) {
+    // return result.items;
     // 弄个假数据
     List<VideoModel> mockList = [
       VideoModel('戴着口罩的妹子，一半沐浴在阳光下，一般躲藏在阴影中，真美',
@@ -81,32 +89,6 @@ class _HomeTabPageState extends State<HomeTabPage>
       VideoModel('白帽子',
           'https://i0.hdslb.com/bfs/live/user_cover/5a286383e65df5d1be22421e169674724cc2003d.jpg'),
     ];
-    if (!loadMore) {
-      pageIndex = 1;
-    }
-    var currentIndex = pageIndex + (loadMore ? 1 : 0);
-    try {
-      HomeMo result =
-          await HomeDao.get(widget.categoryName, pageIndex: currentIndex);
-      setState(() {
-        if (loadMore) {
-          if (result.items != null && result.items!.isNotEmpty) {
-            videoList = [...videoList, ...mockList];
-            pageIndex++;
-          }
-        } else {
-          videoList = mockList;
-        }
-      });
-    } on NeedAuth catch (e) {
-      print(e);
-      showWarnToast(e.message);
-    } on LbNetError catch (e) {
-      print('e$e');
-      showWarnToast(e.message);
-    }
+    return mockList;
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

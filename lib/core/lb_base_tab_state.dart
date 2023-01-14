@@ -14,15 +14,15 @@ abstract class LbBaseTabState<M, L, T extends StatefulWidget> extends LbState<T>
   List<L> dataList = [];
   int pageIndex = 1;
   bool loadding = false;
-  ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
   get contentChild;
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {
-      var dis = _scrollController.position.maxScrollExtent -
-          _scrollController.position.pixels;
+    scrollController.addListener(() {
+      var dis = scrollController.position.maxScrollExtent -
+          scrollController.position.pixels;
       // 距离底部不足300时加载更多
       if (dis < 300 && !loadding) {
         loadData(loadMore: true);
@@ -34,7 +34,7 @@ abstract class LbBaseTabState<M, L, T extends StatefulWidget> extends LbState<T>
   @override
   void dispose() {
     super.dispose();
-    _scrollController.dispose();
+    scrollController.dispose();
   }
 
   @override
